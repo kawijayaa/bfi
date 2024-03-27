@@ -15,6 +15,8 @@ pub enum OPERATION {
     JumpIfNonZero(usize),
 }
 
+pub type Cells = [Wrapping<u8>; 30000];
+
 pub fn lexer(data: &String) -> Vec<OPERATION> {
     let mut bracket_stack: Vec<usize> = Vec::new();
     let mut operations: Vec<OPERATION> = Vec::new();
@@ -60,7 +62,7 @@ pub fn lexer(data: &String) -> Vec<OPERATION> {
     return operations;
 }
 
-pub fn interpret(operations: Vec<OPERATION>, cells: &mut [Wrapping<u8>; 30000], cp: &mut usize) {
+pub fn interpret(operations: Vec<OPERATION>, cells: &mut Cells, cp: &mut usize) {
     let mut ip = 0;
 
     while ip < operations.len() {

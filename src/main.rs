@@ -1,4 +1,4 @@
-use bfi::{interpret, lexer};
+use bfi::{interpret, lexer, Cells};
 use std::{
     env::args,
     fs::File,
@@ -9,7 +9,7 @@ use std::{
 
 fn main() {
     let mut source_data = String::new();
-    let mut cells: [Wrapping<u8>; 30000] = [Wrapping(0); 30000];
+    let mut cells: Cells = [Wrapping(0); 30000];
     let mut cp: usize = 0;
 
     match args().len() {
