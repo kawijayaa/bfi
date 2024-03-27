@@ -15,7 +15,13 @@ pub enum OPERATION {
     JumpIfNonZero(usize),
 }
 
-pub type Cells = [Wrapping<u8>; 30000];
+pub struct Cells([Wrapping<u8>; 30000]);
+
+impl Cells {
+    pub fn new() -> Cells {
+        Cells([Wrapping(0); 30000])
+    }
+}
 
 pub fn lexer(data: &String) -> Vec<OPERATION> {
     let mut bracket_stack: Vec<usize> = Vec::new();
@@ -68,10 +74,10 @@ pub fn interpret(operations: Vec<OPERATION>, cells: &mut Cells, cp: &mut usize) 
     while ip < operations.len() {
         match operations[ip] {
             OPERATION::Add => {
-                cells[*cp] += 1;
+                cells.0[*cp] += 1;
             }
             OPERATION::Subtract => {
-                cells[*cp] -= 1;
+                cells.0[*cp] -= 1;
             }
             OPERATION::Input => {
                 let mut input = String::new();
@@ -89,7 +95,7 @@ pub fn interpret(operations: Vec<OPERATION>, cells: &mut Cells, cp: &mut usize) 
 
                 match input.trim().parse::<u8>() {
                     Ok(num) => {
-                        cells[*cp] = Wrapping(num);
+                        cells.0[*cp] = Wrapping(num);
                     }
                     Err(_) => {
                         eprintln!("Cannot parse input as u8!");
@@ -98,7 +104,7 @@ pub fn interpret(operations: Vec<OPERATION>, cells: &mut Cells, cp: &mut usize) 
                 }
             }
             OPERATION::Output => {
-                print!("{}", cells[*cp].0 as char);
+                print!("{}", cells.0[*cp].0 as char);
             }
             OPERATION::PointerLeft => {
                 *cp -= 1;
@@ -107,12 +113,12 @@ pub fn interpret(operations: Vec<OPERATION>, cells: &mut Cells, cp: &mut usize) 
                 *cp += 1;
             }
             OPERATION::JumpIfZero(jump_addr) => {
-                if cells[*cp].0 == 0 {
+                if cells.0[*cp].0 == 0 {
                     ip = jump_addr;
                 }
             }
             OPERATION::JumpIfNonZero(jump_addr) => {
-                if cells[*cp].0 != 0 {
+                if cells.0[*cp].0 != 0 {
                     ip = jump_addr;
                 }
             }

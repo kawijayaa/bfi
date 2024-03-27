@@ -3,13 +3,12 @@ use std::{
     env::args,
     fs::File,
     io::{stdin, stdout, BufReader, Read, Write},
-    num::Wrapping,
     process::exit,
 };
 
 fn main() {
     let mut source_data = String::new();
-    let mut cells: Cells = [Wrapping(0); 30000];
+    let mut cells = Cells::new();
     let mut cp: usize = 0;
 
     match args().len() {
